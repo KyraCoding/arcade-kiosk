@@ -1,0 +1,10 @@
+{
+    "manifest_version": 3,
+    "name": "Arcade Kiosk",
+    "description": "A browser extension that alerts you to changes in the HackClub Arcade store inventory!",
+    "version": "1.0",
+    "action": {
+      "default_popup": "client.html",
+      "default_icon": "favicon.png"
+    }
+  }

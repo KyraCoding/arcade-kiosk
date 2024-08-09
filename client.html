@@ -7,28 +7,16 @@
     </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Slackey&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&family=Slackey&display=swap" rel="stylesheet">
+    <script src="tailwind.js"></script>
+    <script src="tailwind.config.js"></script>
 </head>
 
 <body>
-    <h1>Arcade Kiosk</h1>
-    <p id="data"></p>
-    <script>
-        async function delay(ms) {
-            // return await for better async stack trace support in case of errors.
-            return await new Promise(resolve => setTimeout(resolve, ms));
-        }
-        async function checkForUpdates() {
-            console.log("Fetching!")
-            var response = await fetch("https://hackclub.com/api/arcade/shop/")
-            var data = await response.json()
-            document.getElementById("data").innerHTML = JSON.stringify(data)
-            await delay(10000)
-            await checkForUpdates()
-        }
-        checkForUpdates()
-
-    </script>
+    <div class="font-slackey">
+        <h1 class="text-4xl text-arcade-main">Arcade Kiosk</h1>
+    </div>
+    <script src="client.js"></script>
 </body>
 
 </html>

@@ -11,9 +11,17 @@ async function updateLastChecked() {
         if (!data.lastFetchedTime) {
             document.getElementById("lastChecked").innerHTML = `A check is scheduled to occur soon...`
         } else {
-            document.getElementById("lastChecked").innerHTML = `Last checked ${Math.floor((Date.now()-data.lastFetchedTime)/(1000 * 60))} minute${formatPlural(data.lastFetchedTime)} ago...`
+            document.getElementById("lastChecked").innerHTML = `Last checked ${Math.floor((Date.now() - data.lastFetchedTime) / (1000 * 60))} minute${formatPlural(data.lastFetchedTime)} ago...`
         }
 
     })
 }
 updateLastChecked()
+document.getElementById("refresh").addEventListener("click", function () {
+    console.log("Starting manual refresh...")
+    if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+            type: 'refresh'
+        });
+    }
+})

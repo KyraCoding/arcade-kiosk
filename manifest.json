@@ -10,7 +10,9 @@
     "default_popup_height": 600
   },
   "permissions": [
-    "alarms"
+    "alarms",
+    "notifications",
+    "storage"
   ],
   "background": {
     "service_worker": "background.js"

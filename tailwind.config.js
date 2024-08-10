@@ -3,10 +3,13 @@ tailwind.config = {
         extend: {
             fontFamily: {
                 slackey: ['"Slackey"', "sans-serif"],
-                gaegu: ['"gaegu', "sans-serif"]
+                mono: ['"Roboto Mono"', "sans-serif"]
             },
             colors: {
                 'arcade-main': '#fb8b3c',
+                'arcade-background': '#fbefd6',
+                'arcade-sub':'#00afb3',
+                'arcade-link': '#ef3553'
               },
         }
     }

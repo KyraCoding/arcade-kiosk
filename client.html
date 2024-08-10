@@ -12,24 +12,29 @@
     <script src="tailwind.config.js"></script>
 </head>
 
-<body class="h-96 w-96 bg-arcade-background p-6">
-    <div class="h-1/4 flex flex-col items-center font-slackey">
-        <h1 class="text-4xl text-arcade-main text-center">Arcade Kiosk</h1>
-        <a href="https://github.com/MrMeCoding"
-            class="flex w-fit text-center text-lg text-arcade-link border-transparent transition duration-300 hover:border-arcade-link -link border-b-2">By
-            KyraCoding!</a>
-    </div>
-    <div
-        class="flex flex-col h-1/2 items-center justify-center rounded-lg cursor-pointer	bg-arcade-sub shadow-2xl duration-300 hover:-translate-y-0.5 hover:translate-x-0.5">
-        <p class="text-6xl text-center font-bold text-white font-mono">Refresh!</p>
-        <p class="text-2xl text-center text-white font-mono">Last refreshed 8s ago...</p>
+<body class="h-96 w-96 bg-arcade-background">
+    <div class="h-5/6 p-6 gap-2">
+        <div class="h-1/3 flex flex-col items-center font-slackey">
+            <h1 class="text-4xl text-arcade-main text-center">Arcade Kiosk</h1>
+            <a href="https://github.com/MrMeCoding"
+                class="flex w-fit text-center text-lg text-arcade-link border-transparent transition duration-300 hover:border-arcade-link -link border-b-2">By
+                KyraCoding!</a>
+        </div>
+        <div
+            class="flex flex-col h-1/3 items-center justify-center rounded-lg cursor-pointer	bg-arcade-sub shadow-2xl duration-300 hover:-translate-y-0.5 hover:translate-x-0.5">
+            <p class="text-4xl text-center font-bold text-white font-mono">Refresh!</p>
+            <p class="text-2xl text-center text-white font-mono">Last refreshed 8s ago...</p>
 
+        </div>
+        <div class="flex flex-col justify-end h-1/3 font-mono">
+            <p class="text-xl text-center text-gray-800">This project is open source! </p>
+            <p class="text-xl text-center text-gray-800"> Find it <a href="https://github.com/MrMeCoding/arcade-kiosk"
+                    class="text-arcade-link border-transparent transition duration-300 hover:border-arcade-link -link border-b-2">here</a>!
+            </p>
+        </div>
     </div>
-    <div class="flex flex-col justify-end h-1/4 font-mono py-3">
-        <p class="text-xl text-center text-gray-800">This project is open source! </p>
-        <p class="text-xl text-center text-gray-800"> Find it <a href="https://github.com/MrMeCoding/arcade-kiosk"
-                class="text-arcade-link border-transparent transition duration-300 hover:border-arcade-link -link border-b-2">here</a>!
-        </p>
+    <div class="h-1/6 sticky top-[100vh] bg-arcade-sub">
+        
     </div>
     <script src="client.js"></script>
 </body>

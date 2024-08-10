@@ -8,5 +8,11 @@
     "default_icon": "favicon.png",
     "default_popup_width": 400,
     "default_popup_height": 600
+  },
+  "permissions": [
+    "alarms"
+  ],
+  "background": {
+    "service_worker": "background.js"
   }
 }

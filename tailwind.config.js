@@ -9,7 +9,9 @@ tailwind.config = {
                 'arcade-main': '#fb8b3c',
                 'arcade-background': '#fbefd6',
                 'arcade-sub':'#00afb3',
-                'arcade-link': '#ef3553'
+                'arcade-link': '#ef3553',
+                'arcade-sub-hover': '#006D70',
+                'arcade-loading': '#B30400'
               },
         }
     }

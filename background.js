@@ -15,6 +15,17 @@ function formatPlural(num) {
 
 // Main function. Checks for shop inventory changes
 async function refresh() {
+  /*
+  chrome.notifications.create('shop-diff-notif', {
+    type: 'list',
+    iconUrl: 'assets/favicon.png',
+    title: "Shop update 🎉",
+    message: "test",
+    items: [{title:"test",message:"test"}],
+    priority: 2,
+    requireInteraction: true
+  });
+  */
   // Fetch
   console.log("Time to fetch!")
   var response = await fetch("https://hackclub.com/api/arcade/shop/")
@@ -95,7 +106,7 @@ async function refresh() {
       console.log(notifs)
       chrome.notifications.create('shop-diff-notif', {
         type: 'list',
-        iconUrl: 'favicon.png',
+        iconUrl: 'assets/favicon.png',
         title: "Shop update 🎉",
         message: priced.length == 1 ? "A item has changed!" : "Items have changed!",
         items: notifs,
@@ -117,6 +128,12 @@ async function refresh() {
     });
   })
 }
+
+// On extension click, clear on click
+chrome.notifications.onClicked.addListener(function(id) {
+  chrome.notifications.clear(id);
+});
+
 
 // Activates on set interval
 chrome.alarms.onAlarm.addListener(async (alarm) => {

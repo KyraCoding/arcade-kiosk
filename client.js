@@ -17,7 +17,35 @@ async function updateLastChecked() {
 
     })
 }
+var currentPage;
+function changePages(page) {
+    if (page == "home") {
+        document.getElementById("history").classList.add("hidden")
+        document.getElementById("historyImg").src = "assets/history.svg"
+        document.getElementById("settings").classList.add("hidden")
+        document.getElementById("settingsImg").src = "assets/settings.svg"
+    } else if (page == "history") {
+        document.getElementById("home").classList.add("hidden")
+        document.getElementById("homeImg").src = "assets/home.svg"
+        document.getElementById("settings").classList.add("hidden")
+        document.getElementById("settingsImg").src = "assets/settings.svg"
+    } else if (page == "settings") {
+        document.getElementById("home").classList.add("hidden")
+        document.getElementById("homeImg").src = "assets/home.svg"
+        document.getElementById("history").classList.add("hidden")
+        document.getElementById("historyImg").src = "assets/history.svg"
+    }
+    document.getElementById(page).classList.remove("hidden")
+    currentPage = page
+    document.getElementById(page+"Img").src = `assets/${page}-fill.svg`
+}
+
+// Run on load
+var currentPage = "home"
 updateLastChecked()
+changePages("home")
+
+// Event listeners
 document.getElementById("refresh").addEventListener("click", function () {
     console.log("Starting manual refresh...")
     if (navigator.serviceWorker.controller) {
@@ -31,7 +59,7 @@ document.getElementById("refresh").addEventListener("click", function () {
     document.getElementById("refresh").classList.add('bg-arcade-loading')
     document.getElementById("refresh").classList.add('opacity-50')
 })
-navigator.serviceWorker.addEventListener('message', function(event) {
+navigator.serviceWorker.addEventListener('message', function (event) {
     if (event.data && event.data.type === 'refresh') {
         document.getElementById("refreshText").innerHTML = "Refresh!"
         document.getElementById("refresh").classList.add('bg-arcade-sub')
@@ -41,3 +69,13 @@ navigator.serviceWorker.addEventListener('message', function(event) {
         updateLastChecked()
     }
 });
+
+document.getElementById("switchHome").addEventListener("click", function() {
+    changePages("home")
+})
+document.getElementById("switchHistory").addEventListener("click", function() {
+    changePages("history")
+})
+document.getElementById("switchSettings").addEventListener("click", function() {
+    changePages("settings")
+})

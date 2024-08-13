@@ -45,13 +45,13 @@ async function refresh() {
   })
 
   // Get old data
-  var old = chrome.storage.local.get("lastFetched", function (fetched) {
+  chrome.storage.local.get("lastFetched", function (fetched) {
     olddata = fetched.lastFetched
     added = []
     stocked = []
     priced = []
     removed = []
-
+    olddata[Object.keys(olddata)[0]].stock = "33"
     if (Object.keys(olddata).length > 0) {
       Object.keys(parsed).forEach(key => {
         var olditem = olddata[key]
@@ -88,17 +88,41 @@ async function refresh() {
         title: `${change.name} has been added! (${change.new.hours} ticket${formatPlural(change.new.hours)})`,
         message: ""
       })
+      chrome.storage.local.get("history", function (fetched) {
+        data = fetched.history
+        if (data == undefined) {
+          data = []
+        }
+        data.unshift({ type: "new", title: change.name, change: `New item! (Cost: ${change.new.hours} ticket${formatPlural(change.new.hours)})` })
+        chrome.storage.local.set({ "history": data })
+      })
     })
     stocked.forEach((change) => {
       notifs.push({
         title: `${change.name}'s stock: ${change.old.stock} > ${change.new.stock}!`,
         message: ""
       })
+      chrome.storage.local.get("history", function (fetched) {
+        data = fetched.history
+        if (data == undefined) {
+          data = []
+        }
+        data.unshift({ type: change.old.stock > change.new.stock ? "decrease" : "increase", title: change.name, change: `Stock ${change.old.stock > change.new.stock ? "decreased" : "increased"} to ${change.new.stock} (was ${change.old.stock})` })
+        chrome.storage.local.set({ "history": data })
+      })
     })
     priced.forEach((change) => {
       notifs.push({
         title: `${change.name}'s stock: ${change.old.hours} > ${change.new.hours} tickets!`,
         message: ""
+      })
+      chrome.storage.local.get("history", function (fetched) {
+        data = fetched.history
+        if (data == undefined) {
+          data = []
+        }
+        data.unshift({ type: change.old.hours > change.new.hours ? "decrease" : "increase", title: change.name, change: `Price ${change.old.hours > change.new.hours ? "decreased" : "increased"} to ${change.new.hours} (was ${change.old.hours})` })
+        chrome.storage.local.set({ "history": data })
       })
     })
     // Notify
@@ -130,7 +154,7 @@ async function refresh() {
 }
 
 // On extension click, clear on click
-chrome.notifications.onClicked.addListener(function(id) {
+chrome.notifications.onClicked.addListener(function (id) {
   chrome.notifications.clear(id);
 });
 

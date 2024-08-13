@@ -51,7 +51,7 @@ async function refresh() {
     stocked = []
     priced = []
     removed = []
-    if (Object.keys(olddata).length > 0) {
+    if (olddata && Object.keys(olddata).length > 0) {
       Object.keys(parsed).forEach(key => {
         var olditem = olddata[key]
         var newitem = parsed[key]

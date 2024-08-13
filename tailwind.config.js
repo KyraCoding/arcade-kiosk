@@ -11,7 +11,8 @@ tailwind.config = {
                 'arcade-sub':'#00afb3',
                 'arcade-link': '#ef3553',
                 'arcade-sub-hover': '#006D70',
-                'arcade-loading': '#B30400'
+                'arcade-loading': '#B30400',
+                'arcade-main-hover': '#9D5725'
               },
         }
     }

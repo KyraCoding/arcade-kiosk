@@ -17,6 +17,39 @@ async function updateLastChecked() {
 
     })
 }
+function viewHistory() {
+    var historyList = document.getElementById("historyList")
+    chrome.storage.local.get("history", function (fetched) {
+        data = fetched.history
+        
+        if (data?.length > 0)  {
+            while (historyList.firstChild) {
+                historyList.removeChild(historyList.firstChild);
+            }
+            data.forEach((item) => {
+                var itemWrapper = document.createElement("div");
+                itemWrapper.className = "flex flex-col cursor-pointer text-white h-fit w-full rounded p-3 shadow-2xl"
+                if (item.type == "new") {
+                    itemWrapper.classList.add("bg-blue-500")
+                } else if (item.type == "decrease") {
+                    itemWrapper.classList.add("bg-rose-500")
+                } else if (item.type == "increase") {
+                    itemWrapper.classList.add("bg-emerald-500")
+                }
+                var itemTitle = document.createElement("p");
+                itemTitle.className = "flex text-2xl truncate"
+                itemTitle.innerHTML = item.title;
+                var itemChange = document.createElement("p");
+                itemChange.className = "flex text-lg truncate"
+                itemChange.innerHTML = item.change;
+
+                itemWrapper.appendChild(itemTitle)
+                itemWrapper.appendChild(itemChange)
+                historyList.appendChild(itemWrapper)
+            })
+        }
+    })
+}
 var currentPage;
 function changePages(page) {
     if (page == "home") {
@@ -29,6 +62,7 @@ function changePages(page) {
         document.getElementById("homeImg").src = "assets/home.svg"
         document.getElementById("settings").classList.add("hidden")
         document.getElementById("settingsImg").src = "assets/settings.svg"
+        viewHistory()
     } else if (page == "settings") {
         document.getElementById("home").classList.add("hidden")
         document.getElementById("homeImg").src = "assets/home.svg"
@@ -37,7 +71,7 @@ function changePages(page) {
     }
     document.getElementById(page).classList.remove("hidden")
     currentPage = page
-    document.getElementById(page+"Img").src = `assets/${page}-fill.svg`
+    document.getElementById(page + "Img").src = `assets/${page}-fill.svg`
 }
 
 // Run on load
@@ -70,12 +104,12 @@ navigator.serviceWorker.addEventListener('message', function (event) {
     }
 });
 
-document.getElementById("switchHome").addEventListener("click", function() {
+document.getElementById("switchHome").addEventListener("click", function () {
     changePages("home")
 })
-document.getElementById("switchHistory").addEventListener("click", function() {
+document.getElementById("switchHistory").addEventListener("click", function () {
     changePages("history")
 })
-document.getElementById("switchSettings").addEventListener("click", function() {
+document.getElementById("switchSettings").addEventListener("click", function () {
     changePages("settings")
 })

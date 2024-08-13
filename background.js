@@ -51,7 +51,6 @@ async function refresh() {
     stocked = []
     priced = []
     removed = []
-    olddata[Object.keys(olddata)[0]].stock = "33"
     if (Object.keys(olddata).length > 0) {
       Object.keys(parsed).forEach(key => {
         var olditem = olddata[key]
@@ -81,6 +80,7 @@ async function refresh() {
 
 
     // Format
+    //chrome.storage.local.remove("history")
     var notifs = []
 
     added.forEach((change) => {

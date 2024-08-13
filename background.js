@@ -45,102 +45,100 @@ async function refresh() {
   })
 
   // Get old data
-  chrome.storage.local.get("lastFetched", function (fetched) {
-    olddata = fetched.lastFetched
-    added = []
-    stocked = []
-    priced = []
-    removed = []
-    //olddata[Object.keys(olddata)[0]].stock = 69
-    if (olddata && Object.keys(olddata).length > 0) {
-      Object.keys(parsed).forEach(key => {
-        var olditem = olddata[key]
-        var newitem = parsed[key]
+  olddata = (await chrome.storage.local.get("lastFetched")).lastFetched
+  added = []
+  stocked = []
+  priced = []
+  removed = []
+  olddata[Object.keys(olddata)[0]].stock = 69
+  if (olddata && Object.keys(olddata).length > 0) {
+    Object.keys(parsed).forEach(key => {
+      var olditem = olddata[key]
+      var newitem = parsed[key]
 
-        // Handle "unlimited" items
-        if (newitem.stock == null) newitem.stock = Infinity
-        if (olditem.stock == null) olditem.stock = Infinity
+      // Handle "unlimited" items
+      if (newitem.stock == null) newitem.stock = Infinity
+      if (olditem.stock == null) olditem.stock = Infinity
 
-        // If it's a new item (yay!)
-        if (olditem == undefined) {
-          added.push({ name: key, old: olditem, new: newitem })
+      // If it's a new item (yay!)
+      if (olditem == undefined) {
+        added.push({ name: key, old: olditem, new: newitem })
 
-          // If stock changes (ono)
-        } else if (olditem.stock != newitem.stock) {
-          stocked.push({ name: key, old: olditem, new: newitem })
+        // If stock changes (ono)
+      } else if (olditem.stock != newitem.stock) {
+        stocked.push({ name: key, old: olditem, new: newitem })
 
-          // If ticket prices change (ono)
-        } else if (olditem.hours != newitem.hours) {
-          priced.push({ name: key, old: olditem, new: newitem })
-        }
-      });
-    } else {
-      // Usually on first run, we dont wanna flood notifs
-      console.log("No old data found, skipping!")
-    }
-
-
-    // Format
-    //chrome.storage.local.remove("history")
-    var notifs = []
-    var history = []
-
-    added.forEach((change) => {
-      notifs.push({
-        title: `${change.name} has been added! (${change.new.hours} ticket${formatPlural(change.new.hours)})`,
-        message: ""
-      })
-      history.unshift({ type: "new", title: change.name, change: `New item! (Cost: ${change.new.hours} ticket${formatPlural(change.new.hours)})` })
-    })
-    stocked.forEach((change) => {
-      notifs.push({
-        title: `${change.name}'s stock: ${change.old.stock} > ${change.new.stock}!`,
-        message: ""
-      })
-      history.unshift({ type: change.old.stock > change.new.stock ? "decrease" : "increase", title: change.name, change: `Stock ${change.old.stock > change.new.stock ? "decreased" : "increased"} to ${change.new.stock} (was ${change.old.stock})` })
-    })
-    priced.forEach((change) => {
-      notifs.push({
-        title: `${change.name}'s stock: ${change.old.hours} > ${change.new.hours} tickets!`,
-        message: ""
-      })
-      history.unshift({ type: change.old.hours > change.new.hours ? "decrease" : "increase", title: change.name, change: `Price ${change.old.hours > change.new.hours ? "decreased" : "increased"} to ${change.new.hours} (was ${change.old.hours})` })
-    })
-    // Notify
-    if (notifs.length > 0) {
-      console.log(notifs)
-      chrome.notifications.create('shop-diff-notif', {
-        type: 'list',
-        iconUrl: 'assets/favicon.png',
-        title: "Shop update 🎉",
-        message: priced.length == 1 ? "A item has changed!" : "Items have changed!",
-        items: notifs,
-        priority: 2,
-        requireInteraction: true
-      });
-      chrome.action.setBadgeText({ text: '!' });
-      chrome.action.setBadgeBackgroundColor({ color: '#00AFB3' });
-    }
-    // Add to history
-    chrome.storage.local.get("history", function (fetched) {
-      var formerHistory = fetched.history
-      if (!history || history?.length < 1) {
-        formerHistory = []
+        // If ticket prices change (ono)
+      } else if (olditem.hours != newitem.hours) {
+        priced.push({ name: key, old: olditem, new: newitem })
       }
-      history = history.concat(formerHistory)
-      chrome.storage.local.set({"history": history})
+    });
+  } else {
+    // Usually on first run, we dont wanna flood notifs
+    console.log("No old data found, skipping!")
+  }
+
+
+  // Format
+  //chrome.storage.local.remove("history")
+  var notifs = []
+  var history = []
+
+  added.forEach((change) => {
+    notifs.push({
+      title: `${change.name} has been added! (${change.new.hours} ticket${formatPlural(change.new.hours)})`,
+      message: ""
     })
-    // Finish up
-    chrome.storage.local.set({ "lastFetched": parsed })
-    chrome.storage.local.set({ "lastFetchedTime": Date.now() })
-    self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
-      clients.forEach(client => {
-        client.postMessage({
-          type: 'refresh'
-        });
+    history.unshift({ type: "new", title: change.name, change: `New item! (Cost: ${change.new.hours} ticket${formatPlural(change.new.hours)})` })
+  })
+  stocked.forEach((change) => {
+    notifs.push({
+      title: `${change.name}'s stock: ${change.old.stock} > ${change.new.stock}!`,
+      message: ""
+    })
+    history.unshift({ type: change.old.stock > change.new.stock ? "decrease" : "increase", title: change.name, change: `Stock ${change.old.stock > change.new.stock ? "decreased" : "increased"} to ${change.new.stock} (was ${change.old.stock})` })
+  })
+  priced.forEach((change) => {
+    notifs.push({
+      title: `${change.name}'s stock: ${change.old.hours} > ${change.new.hours} tickets!`,
+      message: ""
+    })
+    history.unshift({ type: change.old.hours > change.new.hours ? "decrease" : "increase", title: change.name, change: `Price ${change.old.hours > change.new.hours ? "decreased" : "increased"} to ${change.new.hours} (was ${change.old.hours})` })
+  })
+  // Notify
+  if (notifs.length > 0) {
+    console.log(notifs)
+    chrome.notifications.create('shop-diff-notif', {
+      type: 'list',
+      iconUrl: 'assets/favicon.png',
+      title: "Shop update 🎉",
+      message: priced.length == 1 ? "A item has changed!" : "Items have changed!",
+      items: notifs,
+      priority: 2,
+      requireInteraction: true
+    });
+    chrome.action.setBadgeText({ text: '!' });
+    chrome.action.setBadgeBackgroundColor({ color: '#00AFB3' });
+  }
+  // Add to history
+  var formerHistory = (await chrome.storage.local.get("history")).history
+  if (!history || history?.length < 1) {
+    formerHistory = []
+  }
+  history = history.concat(formerHistory)
+  await chrome.storage.local.set({ "history": history })
+
+  // Finish up
+  await chrome.storage.local.set({ "lastFetched": parsed })
+  await chrome.storage.local.set({ "lastFetchedTime": Date.now() })
+  self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
+    clients.forEach(client => {
+      client.postMessage({
+        type: 'refresh'
       });
     });
-  })
+  });
+
 }
 
 // On extension click, clear on click

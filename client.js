@@ -7,48 +7,43 @@ function formatPlural(num) {
 }
 async function updateLastChecked() {
     chrome.action.setBadgeText({ text: '' });
-    chrome.storage.local.get("lastFetchedTime", function (data) {
-        console.log("Value is " + data.lastFetchedTime);
-        if (!data.lastFetchedTime) {
-            document.getElementById("lastChecked").innerHTML = `A check is scheduled to occur soon...`
-        } else {
-            document.getElementById("lastChecked").innerHTML = `Last checked ${Math.floor((Date.now() - data.lastFetchedTime) / (1000 * 60))} minute${formatPlural(Math.floor((Date.now() - data.lastFetchedTime) / (1000 * 60)))} ago...`
-        }
-
-    })
+    var data = (await chrome.storage.local.get("lastFetchedTime")).lastFetchedTime
+    if (!data) {
+        document.getElementById("lastChecked").innerHTML = `A check is scheduled to occur soon...`
+    } else {
+        document.getElementById("lastChecked").innerHTML = `Last checked ${Math.floor((Date.now() - data) / (1000 * 60))} minute${formatPlural(Math.floor((Date.now() - data) / (1000 * 60)))} ago...`
+    }
 }
-function viewHistory() {
+async function viewHistory() {
     var historyList = document.getElementById("historyList")
-    chrome.storage.local.get("history", function (fetched) {
-        data = fetched.history
-        
-        if (data?.length > 0)  {
-            while (historyList.firstChild) {
-                historyList.removeChild(historyList.firstChild);
-            }
-            data.forEach((item) => {
-                var itemWrapper = document.createElement("div");
-                itemWrapper.className = "flex flex-col cursor-pointer text-white h-fit w-full rounded p-3 shadow-2xl"
-                if (item.type == "new") {
-                    itemWrapper.classList.add("bg-blue-500")
-                } else if (item.type == "decrease") {
-                    itemWrapper.classList.add("bg-rose-500")
-                } else if (item.type == "increase") {
-                    itemWrapper.classList.add("bg-emerald-500")
-                }
-                var itemTitle = document.createElement("p");
-                itemTitle.className = "flex text-2xl truncate"
-                itemTitle.innerHTML = item.title;
-                var itemChange = document.createElement("p");
-                itemChange.className = "flex text-lg truncate"
-                itemChange.innerHTML = item.change;
-
-                itemWrapper.appendChild(itemTitle)
-                itemWrapper.appendChild(itemChange)
-                historyList.appendChild(itemWrapper)
-            })
+    data = (await chrome.storage.local.get("history")).history
+    if (data?.length > 0) {
+        while (historyList.firstChild) {
+            historyList.removeChild(historyList.firstChild);
         }
-    })
+        data.forEach((item) => {
+            var itemWrapper = document.createElement("div");
+            itemWrapper.className = "flex flex-col cursor-pointer text-white h-fit w-full rounded p-3 shadow-2xl"
+            if (item.type == "new") {
+                itemWrapper.classList.add("bg-blue-500")
+            } else if (item.type == "decrease") {
+                itemWrapper.classList.add("bg-rose-500")
+            } else if (item.type == "increase") {
+                itemWrapper.classList.add("bg-emerald-500")
+            }
+            var itemTitle = document.createElement("p");
+            itemTitle.className = "flex text-2xl truncate"
+            itemTitle.innerHTML = item.title;
+            var itemChange = document.createElement("p");
+            itemChange.className = "flex text-lg truncate"
+            itemChange.innerHTML = item.change;
+
+            itemWrapper.appendChild(itemTitle)
+            itemWrapper.appendChild(itemChange)
+            historyList.appendChild(itemWrapper)
+        })
+    }
+
 }
 var currentPage;
 function changePages(page) {

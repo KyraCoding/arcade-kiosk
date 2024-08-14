@@ -56,7 +56,9 @@ async function viewSettings() {
             settingsList.removeChild(settingsList.firstChild);
         }
         Object.keys(data).forEach(item => {
-            priorSettings[item] = true
+            if (priorSettings[item] == undefined) {
+                priorSettings[item] = true
+            }
             var option = document.createElement("p");
             if (priorSettings[item]) {
                 option.className = "flex p-2 text-xl bg-emerald-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-emerald-400"
@@ -64,22 +66,23 @@ async function viewSettings() {
                 option.className = "flex p-2 text-xl bg-rose-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-rose-400"
             }
             option.innerHTML = item
+            option.dataset.item = item
             settingsList.appendChild(option)
-            option.addEventListener("click", async function () {
-                toggleSettings()
+            option.addEventListener("click", function () {
+                toggleSettings(item)
             })
         })
         await chrome.storage.local.set({ "settings": priorSettings })
     }
 }
-async function toggleSettings() {
+async function toggleSettings(item) {
     let priorSettings = (await chrome.storage.local.get("settings")).settings
-    priorSettings[this.textContent] = !priorSettings[this.textContent]
-    console.log(this.className)
-    if (priorSettings[this.textContent].className) {
-        this.className = "flex p-2 text-xl bg-emerald-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-emerald-400"
+    priorSettings[item] = !priorSettings[item]
+    var element = document.querySelector(`[data-item="${item}"]`);
+    if (priorSettings[item]) {
+        element.className = "flex p-2 text-xl bg-emerald-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-emerald-400"
     } else {
-        this.className = "flex p-2 text-xl bg-rose-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-rose-400"
+        element.className = "flex p-2 text-xl bg-rose-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-rose-400"
     }
     await chrome.storage.local.set({ "settings": priorSettings })
 }
@@ -146,4 +149,15 @@ document.getElementById("switchHistory").addEventListener("click", function () {
 })
 document.getElementById("switchSettings").addEventListener("click", function () {
     changePages("settings")
+})
+document.getElementById("clearHistory").addEventListener("click", function () {
+    chrome.storage.local.remove("history")
+    var historyList = document.getElementById("historyList")
+    while (historyList.firstChild) {
+        historyList.removeChild(historyList.firstChild);
+    }
+    var empty = document.createElement("h1")
+    empty.className = "flex justify-center text-4xl"
+    empty.innerHTML = "Nothing yet!"
+    historyList.appendChild(empty)
 })

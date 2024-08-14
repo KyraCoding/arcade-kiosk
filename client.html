@@ -37,9 +37,13 @@
         <div class="h-1/6 flex flex-col items-center font-slackey items-center">
             <h1 class="text-4xl text-arcade-main text-center">Kiosk History</h1>
         </div>
-        <div id="historyList" class="h-5/6 font-mono flex flex-col overflow-auto gap-2 mb-2">
-            <h1 class="flex justify-center text-4xl">Nothing yet!</h1>
-
+        <div class="h-5/6 font-mono flex flex-col overflow-auto gap-2 mb-2">
+            <div id="clearHistory"
+                class="flex p-2 text-xl bg-rose-500 w-fit rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-rose-400">
+                Clear history</div>
+            <div id="historyList" class="flex w-full h-fit flex-wrap gap-3 overflow-auto">
+                <h1 class="flex justify-center text-4xl">Nothing yet!</h1>
+            </div>
         </div>
     </div>
     <div id="settings" class="h-[88vh] py-3 px-6 gap-2 hidden">
@@ -48,6 +52,14 @@
         </div>
         <div class="h-5/6 font-mono flex flex-col overflow-auto gap-2 mb-2">
             <h1 class="flex text-2xl">Enable/Disable Notifications:</h1>
+            <div class="flex flex-wrap h-fit gap-3">
+                <div id="toggleAllOn"
+                    class="flex p-2 text-xl bg-blue-500 w-fit h-min rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-blue-400">
+                    Toggle all on</div>
+                <div id="toggleAllOff"
+                    class="flex p-2 text-xl bg-blue-500 w-fit rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-blue-400">
+                    Toggle all off</div>
+            </div>
             <div id="settingsList" class="flex w-full h-fit flex-wrap gap-3 overflow-auto">
                 <h1 class="flex justify-center text-4xl">Please make a fetch request first!</h1>
             </div>

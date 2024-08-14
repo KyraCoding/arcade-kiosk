@@ -4,6 +4,7 @@ Arcade Kiosk is inspired from Skyfall's [Arcade Monitor](https://github.com/Skyf
 ## How does it work?
 Arcade Kiosk automatically calls [Arcade's API](https://hackclub.com/api/arcade/shop/) once every 5 minutes, although a user can manually request a fetch. Should the user miss a browser notification, they can also view a history of all shop changes. Additionally, a user can choose to only be notified when a specific item changes, or ignore other items (looking at you, Yubikey). 
 ## How do I install this?
+Build Manually
 1. [Download Arcade Kiosk](https://github.com/MrMeCoding/arcade-kiosk/archive/refs/heads/main.zip)
 2. Extract the folder from the zip file
 3. Go to chrome://extensions or edge://extensions

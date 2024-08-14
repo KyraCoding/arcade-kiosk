@@ -51,15 +51,16 @@ async function refresh() {
   priced = []
   removed = []
   olddata[Object.keys(olddata)[0]].stock = 69
+  olddata[Object.keys(olddata)[1]].stock = 0
+  delete(olddata[Object.keys(olddata)[2]])
   if (olddata && Object.keys(olddata).length > 0) {
     Object.keys(parsed).forEach(key => {
       var olditem = olddata[key]
       var newitem = parsed[key]
 
       // Handle "unlimited" items
-      if (newitem.stock == null) newitem.stock = Infinity
-      if (olditem.stock == null) olditem.stock = Infinity
-
+      if (newitem?.stock == null) newitem.stock = Infinity
+      if (olditem && olditem?.stock == null) olditem.stock = Infinity
       // If it's a new item (yay!)
       if (olditem == undefined) {
         added.push({ name: key, old: olditem, new: newitem })

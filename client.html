@@ -3,7 +3,7 @@
 
 <head>
     <title>
-        Arcade Kiosk
+        arcKio{f0und_th3_f1ag}
     </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,7 @@
 </head>
 
 <body class="h-96 w-96 bg-arcade-background">
-    <div id="home" class="h-[88vh] py-3 px-6 gap-2">
+    <div id="home" class="h-[86vh] py-3 px-6 gap-2">
         <div class="h-1/3 flex flex-col items-center font-slackey">
             <h1 class="text-4xl text-arcade-main text-center">Arcade Kiosk</h1>
             <a href="https://github.com/MrMeCoding" target="_blank"
@@ -21,7 +21,7 @@
                 KyraCoding!</a>
         </div>
         <div id="refresh"
-            class="flex flex-col h-1/3 items-center justify-center rounded-lg cursor-pointer p-2 bg-arcade-sub shadow-2xl duration-300 hover:bg-arcade-sub-hover">
+            class="flex flex-col h-1/3 items-center justify-center rounded-lg cursor-pointer p-2 bg-arcade-sub shadow-xl duration-300 hover:bg-arcade-sub-hover">
             <p id="refreshText" class="text-2xl text-center font-bold text-white font-mono">Refresh!</p>
             <p class="text-xl text-center text-white font-mono" id="lastChecked">Loading...</p>
         </div>
@@ -33,20 +33,27 @@
             </p>
         </div>
     </div>
-    <div id="history" class="h-[88vh] py-3 px-6 hidden">
+    <div id="history" class="h-[86vh] py-3 px-6 hidden">
         <div class="h-1/6 flex flex-col items-center font-slackey items-center">
             <h1 class="text-4xl text-arcade-main text-center">Kiosk History</h1>
         </div>
         <div class="h-5/6 font-mono flex flex-col overflow-auto gap-2 mb-2">
             <div id="clearHistory"
-                class="flex p-2 text-xl bg-rose-500 w-fit rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-rose-400">
-                Clear history</div>
+                class="flex p-2 text-xl bg-red-500 w-fit rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-rose-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-trash fill-white h-4"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                    <path
+                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                </svg>
+            </div>
             <div id="historyList" class="flex w-full h-fit flex-wrap gap-3 overflow-auto">
                 <h1 class="flex justify-center text-4xl">Nothing yet!</h1>
             </div>
         </div>
     </div>
-    <div id="settings" class="h-[88vh] py-3 px-6 gap-2 hidden">
+    <div id="settings" class="h-[86vh] py-3 px-6 gap-2 hidden">
         <div class="h-1/6 flex flex-col items-center font-slackey">
             <h1 class="text-4xl text-arcade-main text-center">Kiosk Settings</h1>
         </div>
@@ -65,17 +72,17 @@
             </div>
         </div>
     </div>
-    <div class="h-[12vh] sticky top-[100vh] bg-arcade-sub flex flex-row">
+    <div class="h-[14vh] sticky top-[100vh] bg-arcade-sub flex flex-row">
         <div id="switchHome"
-            class=" flex w-full justify-center duration-300 hover:bg-arcade-sub-hover cursor-pointer p-2">
+            class=" flex w-full justify-center duration-300 hover:bg-arcade-sub-hover cursor-pointer p-3">
             <img id="homeImg" src="assets/home.svg" class="flex h-full aspect-square">
         </div>
         <div id="switchHistory"
-            class="flex w-full justify-center duration-300 hover:bg-arcade-sub-hover cursor-pointer p-2">
+            class="flex w-full justify-center duration-300 hover:bg-arcade-sub-hover cursor-pointer p-3">
             <img id="historyImg" src="assets/history.svg" class="flex h-full aspect-square">
         </div>
         <div id="switchSettings"
-            class="flex w-full justify-center duration-300 hover:bg-arcade-sub-hover cursor-pointer p-2">
+            class="flex w-full justify-center duration-300 hover:bg-arcade-sub-hover cursor-pointer p-3">
             <img id="settingsImg" src="assets/settings.svg" class="flex h-full aspect-square">
         </div>
     </div>

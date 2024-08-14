@@ -25,7 +25,7 @@ async function viewHistory() {
             var itemWrapper = document.createElement("div");
             itemWrapper.className = "flex flex-col cursor-pointer text-white h-fit w-full rounded p-3 shadow-2xl"
             if (item.type == "new") {
-                itemWrapper.classList.add("bg-blue-500")
+                itemWrapper.classList.add("bg-sky-500")
             } else if (item.type == "decrease") {
                 itemWrapper.classList.add("bg-rose-500")
             } else if (item.type == "increase") {

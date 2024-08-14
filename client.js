@@ -48,6 +48,7 @@ async function viewSettings() {
     var settingsList = document.getElementById("settingsList")
     var data = (await chrome.storage.local.get("lastFetched")).lastFetched
     var priorSettings = (await chrome.storage.local.get("settings")).settings
+    console.log(priorSettings)
     if (data != undefined) {
         if (priorSettings == undefined) {
             priorSettings = {}
@@ -75,9 +76,9 @@ async function viewSettings() {
         await chrome.storage.local.set({ "settings": priorSettings })
     }
 }
-async function toggleSettings(item) {
+async function toggleSettings(item,forceState) {
     let priorSettings = (await chrome.storage.local.get("settings")).settings
-    priorSettings[item] = !priorSettings[item]
+    priorSettings[item] = forceState ?? !priorSettings[item]
     var element = document.querySelector(`[data-item="${item}"]`);
     if (priorSettings[item]) {
         element.className = "flex p-2 text-xl bg-emerald-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-emerald-400"
@@ -160,4 +161,16 @@ document.getElementById("clearHistory").addEventListener("click", function () {
     empty.className = "flex justify-center text-4xl"
     empty.innerHTML = "Nothing yet!"
     historyList.appendChild(empty)
+})
+document.getElementById("toggleAllOn").addEventListener("click", function() {
+    const elements = document.querySelectorAll('[data-item]');
+    elements.forEach(toggle => {
+        toggleSettings(toggle.dataset.item, true)
+    })
+})
+document.getElementById("toggleAllOff").addEventListener("click", function() {
+    const elements = document.querySelectorAll('[data-item]');
+    elements.forEach(toggle => {
+        toggleSettings(toggle.dataset.item, false)
+    })
 })

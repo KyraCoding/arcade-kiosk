@@ -16,7 +16,7 @@ async function updateLastChecked() {
 }
 async function viewHistory() {
     var historyList = document.getElementById("historyList")
-    data = (await chrome.storage.local.get("history")).history
+    var data = (await chrome.storage.local.get("history")).history
     if (data?.length > 0) {
         while (historyList.firstChild) {
             historyList.removeChild(historyList.firstChild);
@@ -43,7 +43,45 @@ async function viewHistory() {
             historyList.appendChild(itemWrapper)
         })
     }
-
+}
+async function viewSettings() {
+    var settingsList = document.getElementById("settingsList")
+    var data = (await chrome.storage.local.get("lastFetched")).lastFetched
+    var priorSettings = (await chrome.storage.local.get("settings")).settings
+    if (data != undefined) {
+        if (priorSettings == undefined) {
+            priorSettings = {}
+        }
+        while (settingsList.firstChild) {
+            settingsList.removeChild(settingsList.firstChild);
+        }
+        Object.keys(data).forEach(item => {
+            priorSettings[item] = true
+            var option = document.createElement("p");
+            if (priorSettings[item]) {
+                option.className = "flex p-2 text-xl bg-emerald-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-emerald-400"
+            } else {
+                option.className = "flex p-2 text-xl bg-rose-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-rose-400"
+            }
+            option.innerHTML = item
+            settingsList.appendChild(option)
+            option.addEventListener("click", async function () {
+                toggleSettings()
+            })
+        })
+        await chrome.storage.local.set({ "settings": priorSettings })
+    }
+}
+async function toggleSettings() {
+    let priorSettings = (await chrome.storage.local.get("settings")).settings
+    priorSettings[this.textContent] = !priorSettings[this.textContent]
+    console.log(this.className)
+    if (priorSettings[this.textContent].className) {
+        this.className = "flex p-2 text-xl bg-emerald-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-emerald-400"
+    } else {
+        this.className = "flex p-2 text-xl bg-rose-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-rose-400"
+    }
+    await chrome.storage.local.set({ "settings": priorSettings })
 }
 var currentPage;
 function changePages(page) {
@@ -63,6 +101,7 @@ function changePages(page) {
         document.getElementById("homeImg").src = "assets/home.svg"
         document.getElementById("history").classList.add("hidden")
         document.getElementById("historyImg").src = "assets/history.svg"
+        viewSettings()
     }
     document.getElementById(page).classList.remove("hidden")
     currentPage = page

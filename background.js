@@ -50,7 +50,7 @@ async function refresh() {
   stocked = []
   priced = []
   removed = []
-  olddata[Object.keys(olddata)[0]].stock = 69
+  //olddata[Object.keys(olddata)[0]].stock = 69
   if (olddata && Object.keys(olddata).length > 0) {
     Object.keys(parsed).forEach(key => {
       var olditem = olddata[key]
@@ -122,11 +122,10 @@ async function refresh() {
   }
   // Add to history
   var formerHistory = (await chrome.storage.local.get("history")).history
-  if (!history || history?.length < 1) {
+  if (!formerHistory || formerHistory?.length < 1) {
     formerHistory = []
   }
-  history = history.concat(formerHistory)
-  await chrome.storage.local.set({ "history": history })
+  await chrome.storage.local.set({ "history": history.concat(formerHistory) })
 
   // Finish up
   await chrome.storage.local.set({ "lastFetched": parsed })

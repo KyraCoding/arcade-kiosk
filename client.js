@@ -47,21 +47,18 @@ async function viewHistory() {
 async function viewSettings() {
     var settingsList = document.getElementById("settingsList")
     var data = (await chrome.storage.local.get("lastFetched")).lastFetched
-    var priorSettings = (await chrome.storage.local.get("settings")).settings
-    console.log(priorSettings)
     if (data != undefined) {
-        if (priorSettings == undefined) {
-            priorSettings = {}
-        }
         while (settingsList.firstChild) {
             settingsList.removeChild(settingsList.firstChild);
         }
-        Object.keys(data).forEach(item => {
-            if (priorSettings[item] == undefined) {
-                priorSettings[item] = true
+        for (var i = 0; i < Object.keys(data).length; i++) {
+            let item = Object.keys(data)[i]
+            let priorSettings = (await chrome.storage.local.get(item))[item]
+            if (priorSettings == undefined) {
+                priorSettings = true
             }
             var option = document.createElement("p");
-            if (priorSettings[item]) {
+            if (priorSettings) {
                 option.className = "flex p-2 text-xl bg-emerald-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-emerald-400"
             } else {
                 option.className = "flex p-2 text-xl bg-rose-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-rose-400"
@@ -72,20 +69,19 @@ async function viewSettings() {
             option.addEventListener("click", function () {
                 toggleSettings(item)
             })
-        })
-        await chrome.storage.local.set({ "settings": priorSettings })
+        }
     }
 }
-async function toggleSettings(item,forceState) {
-    let priorSettings = (await chrome.storage.local.get("settings")).settings
-    priorSettings[item] = forceState ?? !priorSettings[item]
+async function toggleSettings(item, forceState) {
+    let priorSettings = (await chrome.storage.local.get(item))[item]
+    priorSettings = forceState ?? !priorSettings
     var element = document.querySelector(`[data-item="${item}"]`);
-    if (priorSettings[item]) {
+    if (priorSettings) {
         element.className = "flex p-2 text-xl bg-emerald-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-emerald-400"
     } else {
         element.className = "flex p-2 text-xl bg-rose-500 rounded cursor-pointer shadow-2xl transition duration-300 hover:bg-rose-400"
     }
-    await chrome.storage.local.set({ "settings": priorSettings })
+    await chrome.storage.local.set({ [item]: priorSettings })
 }
 var currentPage;
 function changePages(page) {
@@ -162,13 +158,13 @@ document.getElementById("clearHistory").addEventListener("click", function () {
     empty.innerHTML = "Nothing yet!"
     historyList.appendChild(empty)
 })
-document.getElementById("toggleAllOn").addEventListener("click", function() {
+document.getElementById("toggleAllOn").addEventListener("click", function () {
     const elements = document.querySelectorAll('[data-item]');
     elements.forEach(toggle => {
         toggleSettings(toggle.dataset.item, true)
     })
 })
-document.getElementById("toggleAllOff").addEventListener("click", function() {
+document.getElementById("toggleAllOff").addEventListener("click", function () {
     const elements = document.querySelectorAll('[data-item]');
     elements.forEach(toggle => {
         toggleSettings(toggle.dataset.item, false)

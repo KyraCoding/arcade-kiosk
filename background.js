@@ -57,10 +57,14 @@ async function refresh() {
   */
 
   if (olddata && Object.keys(olddata).length > 0) {
-    Object.keys(parsed).forEach(key => {
+    for (var i = 0; i < Object.keys(parsed).length; i++) {
+      let key = Object.keys(parsed)[i]
+      var notifEnabled = (await chrome.storage.local.get(key))[key] ?? true
       var olditem = olddata[key]
       var newitem = parsed[key]
 
+      // probably a yubikey
+      if (!notifEnabled) continue
       // Handle "unlimited" items
       if (newitem?.stock == null) newitem.stock = Infinity
       if (olditem && olditem?.stock == null) olditem.stock = Infinity
@@ -76,7 +80,7 @@ async function refresh() {
       } else if (olditem.hours != newitem.hours) {
         priced.push({ name: key, old: olditem, new: newitem })
       }
-    });
+    };
   } else {
     // Usually on first run, we dont wanna flood notifs
     console.log("No old data found, skipping!")

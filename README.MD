@@ -1,6 +1,8 @@
 # Arcade Kiosk
 ## What is it?
 Arcade Kiosk is inspired from Skyfall's [Arcade Monitor](https://github.com/SkyfallWasTaken/arcade-monitor/), but has a crucial difference. While Arcade Monitor is a bot, Arcade Kiosk is a chrome extension that sends a browser notification when a change in the HackClub Arcade shop is detected.
+
+![Kiosk](https://i.ibb.co/60hmYgF/Screenshot-2024-08-28-10-14-05-AM.png)
 ## How does it work?
 Arcade Kiosk automatically calls [Arcade's API](https://hackclub.com/api/arcade/shop/) once every 5 minutes, although a user can manually request a fetch. Should the user miss a browser notification, they can also view a history of all shop changes. Additionally, a user can choose to only be notified when a specific item changes, or ignore other items (looking at you, Yubikey). 
 ## How do I install this?
